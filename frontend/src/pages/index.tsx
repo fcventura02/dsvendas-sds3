@@ -1,3 +1,4 @@
+import NavBar from '../components/NavBar/'
 import Head from 'next/head'
 import Footer from '../components/Footer'
 
@@ -7,9 +8,10 @@ export default function Home() {
       <Head>
         <title>DSVendas | Home</title>
       </Head>
-      <div>
+      <NavBar/>
+      <div className="container">
         <h1>
-          Hello world!
+          Hello
         </h1>
       </div>
       <Footer/>
