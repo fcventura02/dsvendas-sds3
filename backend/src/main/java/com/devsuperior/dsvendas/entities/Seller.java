@@ -16,7 +16,7 @@ public class Seller {
 	
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private String name;
 	
 	@OneToMany(mappedBy = "seller")
@@ -24,7 +24,7 @@ public class Seller {
 	
 	public Seller() {}
 	
-	public Seller(String name, Integer id) {
+	public Seller(String name, Long id) {
 		this.name = name;
 		this.id = id;
 	}
@@ -37,11 +37,11 @@ public class Seller {
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
