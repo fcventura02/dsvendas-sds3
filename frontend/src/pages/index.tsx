@@ -1,9 +1,7 @@
-import NavBar from '../components/NavBar/'
 import Head from 'next/head'
+import Link from 'next/link'
 import Footer from '../components/Footer'
-import DataTable from '../components/DataTable'
-import BarChart from '../components/BarChart'
-import DonutChart from '../components/DonutChart'
+import NavBar from '../components/NavBar/'
 
 export default function Home() {
   return (
@@ -13,27 +11,23 @@ export default function Home() {
       </Head>
       <NavBar />
       <div className="container">
-        <h1 className="text-primary py-3">
-          Dashboard de vendas
+        <div className="jumbotron">
+        <h1 className="display-4">
+          DSVendas
         </h1>
-        <div className="row px-3">
-          <div className="col-sm-6">
-            <h5 className="text-center text-secondary">Taxa de sucesso(%)</h5>
-            <BarChart />
-          </div>
-          <div className="col-sm-6">
-            <h5 className="text-center text-secondary">
-              Todas as vendas
-            </h5>
-            <DonutChart />
-          </div>
-        </div>
+        <p className="lead">
+          Analise o desempenho das suas vendas por diferentes perspectivas
+        </p>
+        <hr/>
+        <p>
+          Esta aplicação consiste em exibir um dashboard a partir de dados fornecidos por um back end construído com Spring Boot.
+        </p>
 
-        <div className="py-3">
-          <h2 className="text-primary">
-            Todas as vendas
-          </h2>
-          <DataTable />
+        <Link href="/dashboard">
+          <a className="btn btn-primary btn-lg" role="button">
+            Acessar Dashboard
+          </a>
+        </Link>
         </div>
       </div>
       <Footer />
