@@ -1,10 +1,37 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import { api } from '../../utils/requests';
+import { SaleSum } from '../../types/sale'
+
+
+type ChartData = {
+    series: number[];
+    labels: string[];
+}
 
 export default function DonutChart() {
-    const mockData = {
-        series: [477138, 499928, 444867, 220426, 473088],
-        labels: ['Anakin', 'Barry Allen', 'Kal-El', 'Logan', 'Padmé']
-    }
+    const [chartData, setChartData ] = useState<ChartData>({
+        labels:[],
+        series:[],
+    })
+
+    useEffect(()=>{
+        api.get('sales/sum-by-seller')
+        .then(res => {
+            const resData = res.data as SaleSum[];
+            const labels = resData.map(sale => {
+                return sale.sellerName
+            })
+            const series = resData.map(sale => {
+                return sale.sum
+            })
+            setChartData({
+                    labels,
+                    series
+                })
+        })
+        .catch(error => console.log("Erro ao buscar informações para o DonutChart: " + error.message))
+    },[])  
     
     const options = {
         legend: {
@@ -21,9 +48,9 @@ export default function DonutChart() {
             <Chart
                 options={{
                     ...options,
-                    labels: mockData.labels
+                    labels: chartData.labels
                 }}
-                series={mockData.series}
+                series={chartData.series}
                 type="donut"
                 height="200"
             />

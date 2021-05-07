@@ -1,24 +1,64 @@
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+import { round } from '../../utils/format'
+import { api } from '../../utils/requests'
+import { SaleSuccess } from '../../types/sale'
+
+type SeriesData = {
+    name: string;
+    data: number[];
+}
+
+type ChartData = {
+    series: SeriesData[];
+    labels: {
+        categories: string[];
+    };
+}
 
 export default function BarChart() {
+    const [chartData, setChartData ] = useState<ChartData>({
+        series: [{
+            name: "",
+            data: []
+        }],
+        labels: {
+            categories: []
+        },
+    })
+
+    useEffect(()=>{
+        api.get('sales/success-by-seller')
+        .then(res => { 
+            const resData = res.data as SaleSuccess[];
+            const categories = resData.map(sale => {
+                return sale.sellerName
+            })
+            const data = resData.map(sale => {
+                return round((sale.deals * 100) / sale.visited, 1); 
+            })
+            setChartData({
+                    labels:{
+                        categories
+                    },
+                    series:[
+                        {
+                            name:'Sucesso(%)',
+                            data,
+                        }
+                    ]
+                })
+        })
+        .catch(error => console.log("Erro ao buscar informações para o BarChart: " + error.message))
+    },[])  
+
+
     const options = {
         plotOptions: {
             bar: {
                 horizontal: true,
             }
         },
-    };
-
-    const mockData = {
-        labels: {
-            categories: ['Anakin', 'Barry Allen', 'Kal-El', 'Logan', 'Padmé']
-        },
-        series: [
-            {
-                name: "% Sucesso",
-                data: [43.6, 67.1, 67.7, 45.6, 71.1]
-            }
-        ]
     };
 
     const Chart = dynamic(() => import('react-apexcharts'), {
@@ -30,9 +70,9 @@ export default function BarChart() {
             <Chart
                 options={{
                     ...options,
-                    xaxis: mockData.labels,
+                    xaxis: chartData.labels,
                 }}
-                series={mockData.series}
+                series={chartData.series}
                 type="bar"
                 height="200"
             />
